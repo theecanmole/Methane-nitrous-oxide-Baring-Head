@@ -3,10 +3,6 @@ Methane and nitrous oxide concentrations at Baring Head
 # Statistics NZ Tatauranga Aotearoa https://www.stats.govt.nz/indicators/greenhouse-gas-concentrations
 # link to zip file 17/08/2024
 download.file("https://www.stats.govt.nz/assets/Uploads/Environment-indicators-2023/Greenhouse-gas-concentrations/Download-data/greenhouse-gas-concentrations-data-to-2022.zip","greenhouse-gas-concentrations-data-to-2022.zip")
-trying URL 'https://www.stats.govt.nz/assets/Uploads/Environment-indicators-2023/Greenhouse-gas-concentrations/Download-data/greenhouse-gas-concentrations-data-to-2022.zip'
-Content type 'application/zip' length 48094 bytes (46 KB)
-==================================================
-downloaded 46 KB 
 
 # unzip downloaded zip file
 unzip("greenhouse-gas-concentrations-data-to-2022.zip")
@@ -73,8 +69,8 @@ tail(meanmethane)
 4001 2022    11  methane      mean                       1874.2  ppb 2022-12-01
 4005 2022    12  methane      mean                       1870.1  ppb 2022-12-31
 
-svg(filename="NZmethane-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
-png("NZmethane-560by420.png", bg="white", width=560, height=420,pointsize = 14)
+svg(filename="NZmethane-2019-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+#png("NZmethane-560by420.png", bg="white", width=560, height=420,pointsize = 14)
 # ,ylim=c(0,33),
 #jpeg(filename = "NZmethane-2021-560by420.jpeg", width = 640, height = 480, units = "px", pointsize = 16, quality = 100)
 #jpeg(filename = "NZmethane-2021-640by640.jpeg", width = 640, height = 640, units = "px", pointsize = 16, quality = 100)
