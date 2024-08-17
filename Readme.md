@@ -1,3 +1,10 @@
+---
+title: "Methane and nitrous oxide concentrations at Baring Head Wellington New Zealand"
+author: "theecanmole"
+date: '2023-07-23'
+output: html_document
+
+---
 ## Methane and nitrous oxide concentrations at Baring Head Wellington New Zealand
 
 Atmospheric carbon dioxide, methane and nitrous oxide concentrations are continuously recorded at [Baring Head](https://en.wikipedia.org/wiki/Baring_Head), Wellington, New Zealand.
@@ -9,3 +16,5 @@ This repository lists the R programming language script to download the data, se
 ![](NZmethane-2019-720by540.svg)
 
 ![](NZnitrousoxide-2019-720by540.svg)
+
+![](NZ-CO2-BHD-2019-720by540.svg)
