@@ -20,6 +20,7 @@ str(ghgs)
  $ parameter                   : chr  "mean" "mean_fitted" "seasonal_adjusted_mean" "trend" ...
  $ greenhouse_gas_concentration: num  326 326 326 327 326 ...
  $ unit                        : chr  "ppm" "ppm" "ppm" "ppm" ...
+
 table(ghgs[["variable"]]) 
 carbon_dioxide        methane  nitrous_oxide 
           2404           1604           1268  
@@ -39,46 +40,55 @@ str(methane)
  $ parameter                   : chr  "mean" "mean_fitted" "seasonal_adjusted_mean" "trend" ...
  $ greenhouse_gas_concentration: num  1659 1659 1650 1654 1662 ...
  $ unit                        : chr  "ppb" "ppb" "ppb" "ppb" ... 
-meanmethane <- methane[methane[["parameter"]]=="mean",] 
-str(meanmethane) 
+meanfitmethane <- methane[methane[["parameter"]]=="mean_fitted",] 
+str(meanfitmethane) 
 'data.frame':	401 obs. of  6 variables:
  $ year                        : int  1989 1989 1989 1989 1989 1990 1990 1990 1990 1990 ...
  $ month                       : int  8 9 10 11 12 1 2 3 4 5 ...
  $ variable                    : chr  "methane" "methane" "methane" "methane" ...
- $ parameter                   : chr  "mean" "mean" "mean" "mean" ...
+ $ parameter                   : chr  "mean_fitted" "mean_fitted" "mean_fitted" "mean_fitted" ...
  $ greenhouse_gas_concentration: num  1659 1662 1668 1670 1664 ...
- $ unit                        : chr  "ppb" "ppb" "ppb" "ppb" ... 
+ $ unit                        : chr  "ppb" "ppb" "ppb" "ppb" ...
 
 # add date column 
-meanmethane[["date"]] = seq(as.Date('1989-08-31'), by = 'months', length = nrow(meanmethane)) 
-str(meanmethane) 
+meanfitmethane[["date"]] = seq(as.Date('1989-08-31'), by = 'months', length = nrow(meanfitmethane)) 
+str(meanfitmethane) 
 'data.frame':	401 obs. of  7 variables:
  $ year                        : int  1989 1989 1989 1989 1989 1990 1990 1990 1990 1990 ...
  $ month                       : int  8 9 10 11 12 1 2 3 4 5 ...
  $ variable                    : chr  "methane" "methane" "methane" "methane" ...
- $ parameter                   : chr  "mean" "mean" "mean" "mean" ...
+ $ parameter                   : chr  "mean_fitted" "mean_fitted" "mean_fitted" "mean_fitted" ...
  $ greenhouse_gas_concentration: num  1659 1662 1668 1670 1664 ...
  $ unit                        : chr  "ppb" "ppb" "ppb" "ppb" ...
- $ date                        : Date, format: "1989-08-31" "1989-10-01" ... 
-tail(meanmethane) 
-     year month variable parameter greenhouse_gas_concentration unit       date
-3985 2022     7  methane      mean                       1873.8  ppb 2022-07-31
-3989 2022     8  methane      mean                       1880.0  ppb 2022-08-31
-3993 2022     9  methane      mean                       1880.0  ppb 2022-10-01
-3997 2022    10  methane      mean                       1881.4  ppb 2022-10-31
-4001 2022    11  methane      mean                       1874.2  ppb 2022-12-01
-4005 2022    12  methane      mean                       1870.1  ppb 2022-12-31
+ $ date                        : Date, format: "1989-08-31" "1989-10-01" ...
+
+tail(meanfitmethane) 
+     year month variable   parameter greenhouse_gas_concentration unit
+3986 2022     7  methane mean_fitted                       1873.8  ppb
+3990 2022     8  methane mean_fitted                       1880.0  ppb
+3994 2022     9  methane mean_fitted                       1880.0  ppb
+3998 2022    10  methane mean_fitted                       1881.4  ppb
+4002 2022    11  methane mean_fitted                       1874.2  ppb
+4006 2022    12  methane mean_fitted                       1870.1  ppb
+           date
+3986 2022-07-31
+3990 2022-08-31
+3994 2022-10-01
+3998 2022-10-31
+4002 2022-12-01
+4006 2022-12-31
+# create a time series object for average monthly prices
+weekts <- ts(weeklypricefilleddataframe[["price"]],frequency=52,start = c(2010,19))
 
 svg(filename="NZmethane-2019-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 #png("NZmethane-560by420.png", bg="white", width=560, height=420,pointsize = 14)
-# ,ylim=c(0,33),
-#jpeg(filename = "NZmethane-2021-560by420.jpeg", width = 640, height = 480, units = "px", pointsize = 16, quality = 100)
-#jpeg(filename = "NZmethane-2021-640by640.jpeg", width = 640, height = 640, units = "px", pointsize = 16, quality = 100)
 par(mar=c(2.7,3.3,1,1)+0.1)
-plot(meanmethane[["date"]],meanmethane[["greenhouse_gas_concentration"]],tck=0.01,ylab=NA,axes=T,ann=T, type="l",lwd=2,las=1,col="#7570B3")
+plot(meanfitmethane[["date"]],meanfitmethane[["greenhouse_gas_concentration"]],tck=0.01,ylab=NA,axes=T,ann=T, type="l",lwd=2,las=1,col="#7570B3")
+grid(col="darkgray",lwd=1)
+axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
 box(lwd=1)
 mtext(side=1,line=-1.4,cex=1,"Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations")
-mtext(side=3,cex=1.3, line=-1.8,expression(paste("Baring Head Methane concentrations 1989 to 2022")) )
+mtext(side=3,cex=1.3, line=-1.8,expression(paste("Baring Head methane concentrations 1989 to 2022")) )
 mtext(side=2,cex=1.1, line=-1.5,expression(paste("Parts per billion")))
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 dev.off()
@@ -144,51 +154,64 @@ mtext(side=4,cex=0.75, line=0.05,R.version.string)
 dev.off()
             
 # select only Nitrous oxide records
-nitrousoxide <- state_data[state_data[["gas"]]=="Nitrous oxide",]
+nitrousoxide <- ghgs[ghgs[["variable"]]=="nitrous_oxide",]
+
 str(nitrousoxide) 
-'data.frame':	281 obs. of  5 variables:
+'data.frame':	1268 obs. of  6 variables:
+ $ year                        : int  1996 1996 1996 1996 1996 1996 1996 1996 1996 1996 ...
+ $ month                       : int  8 8 8 8 9 9 9 9 10 10 ...
+ $ variable                    : chr  "nitrous_oxide" "nitrous_oxide" "nitrous_oxide" "nitrous_oxide" ...
+ $ parameter                   : chr  "mean" "mean_fitted" "seasonal_adjusted_mean" "trend" ...
+ $ greenhouse_gas_concentration: num  311 311 311 311 NA ...
+ $ unit                        : chr  "ppb" "ppb" "ppb" "ppb" ... 
+meann2o <- nitrousoxide[nitrousoxide[["parameter"]]=="mean",] 
+str(meann2o) 
+'data.frame':	317 obs. of  6 variables:
+ $ year                        : int  1996 1996 1996 1996 1996 1997 1997 1997 1997 1997 ...
+ $ month                       : int  8 9 10 11 12 1 2 3 4 5 ...
+ $ variable                    : chr  "nitrous_oxide" "nitrous_oxide" "nitrous_oxide" "nitrous_oxide" ...
+ $ parameter                   : chr  "mean" "mean" "mean" "mean" ...
+ $ greenhouse_gas_concentration: num  311 NA 311 311 311 ...
+ $ unit                        : chr  "ppb" "ppb" "ppb" "ppb" ... 
+# create a time series object for monthly prices
+meann2ots <- ts(meann2o[["greenhouse_gas_concentration"]],frequency=12,start = c(1996,8)) 
+meann2ots
+       Jan   Feb   Mar   Apr   May   Jun   Jul   Aug   Sep   Oct   Nov   Dec
+1996                                           310.8    NA 311.1 310.9 311.3
+1997    NA    NA 311.4 311.3 312.4 311.3 311.9 312.2 312.4 312.8 312.8 312.8
+1998 313.2 312.5 312.6 312.7 312.4 312.7 313.3 312.8 313.0 313.0 313.0 313.2 
+
+meanfitn2o <- nitrousoxide[nitrousoxide[["parameter"]]=="mean_fitted",] 
+head(meanfitn2o) 
+     year month      variable   parameter greenhouse_gas_concentration unit
+4010 1996     8 nitrous_oxide mean_fitted                        310.8  ppb
+4014 1996     9 nitrous_oxide mean_fitted                        311.0  ppb
+4018 1996    10 nitrous_oxide mean_fitted                        311.1  ppb
+4022 1996    11 nitrous_oxide mean_fitted                        310.9  ppb
+4026 1996    12 nitrous_oxide mean_fitted                        311.3  ppb
+4030 1997     1 nitrous_oxide mean_fitted                        311.4  ppb 
+
+# create a time series object for monthly prices
+meanfitn2ots <- ts(meanfitn2o[["greenhouse_gas_concentration"]],frequency=12,start = c(1996,8)) 
+str(meanfitn2ots) 
+Time-Series [1:317] from 1997 to 2023: 311 311 311 311 311 ... 
+
+#'data.frame':	281 obs. of  5 variables:
  $ period_start      : chr  "1996-08-01" "1996-09-01" "1996-10-01" "1996-11-01" ...
  $ period_end        : Date, format: "1996-08-31" "1996-09-30" ...
  $ concentration     : num  311 NA 311 311 311 ...
  $ gas               : chr  "Nitrous oxide" "Nitrous oxide" "Nitrous oxide" "Nitrous oxide" ...
  $ reference_standard: chr  "NOAA2006a" "NOAA2006a" "NOAA2006a" "NOAA2006a" ... 
  
-cats=c(1,1,1,1,1,1)
-barplot(matrix(cats),col=rainbow(6),axes=F)
-?rainbow
-
 svg(filename="NZnitrousoxide-2019-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 #png("NZnitrousoxide-2019-560by420.png", bg="white", width=560, height=420,pointsize = 14)
-# ,ylim=c(0,33), xlim=c(1989,2017)
-#jpeg(filename = "NZnitrousoxide-2021-560by420.jpeg", width = 640, height = 480, units = "px", pointsize = 16, quality = 100)
-#jpeg(filename = "NZnitrousoxide-2021-640by640.jpeg", width = 640, height = 640, units = "px", pointsize = 16, quality = 100)
 par(mar=c(2.7,3.3,1,1)+0.1)
-plot(nitrousoxide[["period_end"]],nitrousoxide[["concentration"]],tck=0.01,ylab=NA,axes=T,ann=T, type="p",lwd=2,las=1,col="#5035D2") # Purple Heart
+plot(meanfitn2ots,tck=0.01,ylab=NA,axes=T,ann=T, type="l",lwd=1,las=1,col="#5035D2") # Purple Heart
+grid(col="darkgray",lwd=1)
+axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
 box(lwd=1)
 mtext(side=1,line=-1.4,cex=1,"Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations")
-mtext(side=3,cex=1.3, line=-1.8,expression(paste("Baring Head nitrous oxide concentrations 1996 to 2019")) )
+mtext(side=3,cex=1.3, line=-1.8,expression(paste("Baring Head nitrous oxide concentrations 1996 to 2022")) )
 mtext(side=2,cex=1.1, line=-1.5,expression(paste("Parts per billion")))
-mtext(side=4,cex=0.75, line=0.05,R.version.string)
-dev.off()
-
-# select only CO2 records
-co2 <- state_data[state_data[["gas"]]=="Carbon dioxide",]
-str(co2)
-'data.frame':	565 obs. of  5 variables:
- $ period_start      : chr  "1972-12-01" "1973-01-01" "1973-02-01" "1973-03-01" ...
- $ period_end        : Date, format: "1972-12-31" "1973-01-31" ...
- $ concentration     : num  326000 326300 326500 327000 327200 ...
- $ gas               : chr  "Carbon dioxide" "Carbon dioxide" "Carbon dioxide" "Carbon dioxide" ...
- $ reference_standard: chr  "WMOX2007" "WMOX2007" "WMOX2007" "WMOX2007" ... 
- 
-svg(filename="NZ-CO2-BHD-2019-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
-#png("NZ-CO2-BHD-2019-560by420.png", bg="white", width=560, height=420,pointsize = 14)
-par(mar=c(2.7,3.3,1,1)+0.1)
-plot(co2[["period_end"]],co2[["concentration"]]/10^3,tck=0.01,ylab=NA,axes=T,ann=T, type="l",lwd=2,las=1,col="#ED1A3B")   	# Crimson
-box(lwd=1)
-grid()
-mtext(side=1,line=-1.4,cex=1,"Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations")
-mtext(side=3,cex=1.3, line=-1.8,expression(paste("Baring Head Carbon dioxide concentrations 1972 to 2019")) )
-mtext(side=2,cex=1.1, line=-1.5,expression(paste("Parts per million")))
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 dev.off()
