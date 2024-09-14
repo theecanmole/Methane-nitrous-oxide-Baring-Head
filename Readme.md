@@ -1,6 +1,6 @@
 ## Methane and nitrous oxide concentrations at Baring Head Wellington New Zealand
 
-Atmospheric carbon dioxide, methane and nitrous oxide concentrations are continuously recorded at [Baring Head](https://en.wikipedia.org/wiki/Baring_Head), Wellington, New Zealand.
+Atmospheric carbon dioxide, methane and nitrous oxide concentrations are continuously recorded by the [National Institute of Water and Atmospheric Research](https://en.wikipedia.org/wiki/National_Institute_of_Water_and_Atmospheric_Research) at [Baring Head](https://en.wikipedia.org/wiki/Baring_Head), Wellington, New Zealand.
 
 Statistics NZ Tatauranga Aotearoa (the New Zealand statistics agency) displays these records as indicators at [Greenhouse gas concentrations](https://www.stats.govt.nz/indicators/greenhouse-gas-concentrations) 
 
@@ -10,7 +10,7 @@ This is the methane time series.
 
 ![](NZmethane-2019-720by540.svg)
 
-This is a chart of the methane data series created using the [Ggplot2](https://stackoverflow.com/tags/ggplot2) library.
+This is a chart of the methane data series created using the [Ggplot2](https://ggplot2.tidyverse.org/articles/ggplot2.html) library.
 
 ![](BHD-methane-1989-2023-Ggplot.svg)
 
