@@ -1,4 +1,4 @@
-Methane and nitrous oxide concentrations at Baring Head
+## Methane and nitrous oxide concentrations at Baring Head
 
 # Statistics NZ Tatauranga Aotearoa https://www.stats.govt.nz/indicators/greenhouse-gas-concentrations
 # link to zip file 17/08/2024
@@ -40,6 +40,8 @@ str(methane)
  $ parameter                   : chr  "mean" "mean_fitted" "seasonal_adjusted_mean" "trend" ...
  $ greenhouse_gas_concentration: num  1659 1659 1650 1654 1662 ...
  $ unit                        : chr  "ppb" "ppb" "ppb" "ppb" ... 
+
+# select only the mean fitted data set
 meanfitmethane <- methane[methane[["parameter"]]=="mean_fitted",] 
 str(meanfitmethane) 
 'data.frame':	401 obs. of  6 variables:
@@ -52,6 +54,7 @@ str(meanfitmethane)
 
 # add date column 
 meanfitmethane[["date"]] = seq(as.Date('1989-08-31'), by = 'months', length = nrow(meanfitmethane)) 
+
 str(meanfitmethane) 
 'data.frame':	401 obs. of  7 variables:
  $ year                        : int  1989 1989 1989 1989 1989 1990 1990 1990 1990 1990 ...
@@ -77,8 +80,9 @@ tail(meanfitmethane)
 3998 2022-10-31
 4002 2022-12-01
 4006 2022-12-31
-# create a time series object for average monthly prices
-weekts <- ts(weeklypricefilleddataframe[["price"]],frequency=52,start = c(2010,19))
+
+# create a time series object ??
+mfmts <- ts((meanfitmethane[["greenhouse_gas_concentration"]],frequency=12,start = c(1989,08))
 
 svg(filename="NZmethane-2019-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 #png("NZmethane-560by420.png", bg="white", width=560, height=420,pointsize = 14)
@@ -96,20 +100,11 @@ dev.off()
 library(ggplot2) 
 
 svg(filename ="BHD-methane-1989-2023-Ggplot.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
-ggplot(methane, aes(x = year, y = greenhouse_gas_concentration, group= parameter)) +  
-geom_line(linewidth=1, aes (colour = parameter)) + 
+ggplot(meanfitmethane, aes(x = date, y = greenhouse_gas_concentration)) +  
+geom_line(linewidth=1, colour = "#7570B3") + 
 theme_bw(base_size = 14) +
 theme(legend.position = c(0.75,0.82),legend.title = element_text(NULL), plot.caption = element_text(hjust =.5), plot.title = element_text(size = 20,hjust =0.5)) +
-labs(title="New Zealand methane emissions 1990 to 2023", caption="Data: Ministry of Business Innovation & Employment\nhttps://www.mbie.govt.nz/assets/Data-Files/Energy/Weekly-fuel-price-monitoring/weekly-table.csv") +   ylab("ppb") +  xlab("Year") +
-theme(legend.title=element_blank()) 
-
-annotate("text", x= max(datalong[["Year"]]), y = 0, size = 3, angle = 0, hjust = 1,vjust=1, label=R.version.string) +
-annotate("text", x= min(datalong[["Year"]]), y =  3002, size = 3, angle = 0, hjust = 1,vjust=1, label="A") +
-annotate("text", x= min(datalong[["Year"]]), y =  477, size = 3, angle = 0, hjust = 1,vjust=1, label="B") +
-annotate("text", x= min(datalong[["Year"]]), y =  283, size = 3, angle = 0, hjust = 1,vjust=1, label="C") +
-annotate("text", x= min(datalong[["Year"]]), y =  1.15, size = 3, angle = 0, hjust = 1,vjust=1, label="D")
-#annotate("text", x= min(datalong[["Year"]]), y =  , size = 3, angle = 0, hjust = 1,vjust=1, label="E")
-#annotate("text", x= min(datalong[["Year"]]), y =  3002, size = 3, angle = 0, hjust = 1,vjust=1, label="F")
+labs(title="Baring Head methane concentrations 1989 to 2023", caption="Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations") +   ylab("parts per billion") +  xlab("Year") 
 dev.off() 
 
 # change period end date column from character to date format 
@@ -164,6 +159,7 @@ str(nitrousoxide)
  $ parameter                   : chr  "mean" "mean_fitted" "seasonal_adjusted_mean" "trend" ...
  $ greenhouse_gas_concentration: num  311 311 311 311 NA ...
  $ unit                        : chr  "ppb" "ppb" "ppb" "ppb" ... 
+
 meann2o <- nitrousoxide[nitrousoxide[["parameter"]]=="mean",] 
 str(meann2o) 
 'data.frame':	317 obs. of  6 variables:
@@ -173,6 +169,7 @@ str(meann2o)
  $ parameter                   : chr  "mean" "mean" "mean" "mean" ...
  $ greenhouse_gas_concentration: num  311 NA 311 311 311 ...
  $ unit                        : chr  "ppb" "ppb" "ppb" "ppb" ... 
+ 
 # create a time series object for monthly prices
 meann2ots <- ts(meann2o[["greenhouse_gas_concentration"]],frequency=12,start = c(1996,8)) 
 meann2ots
@@ -215,3 +212,33 @@ mtext(side=3,cex=1.3, line=-1.8,expression(paste("Baring Head nitrous oxide conc
 mtext(side=2,cex=1.1, line=-1.5,expression(paste("Parts per billion")))
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 dev.off()
+
+## Carbon dioxide concentrations
+
+# select only methane records
+co2 <- ghgs[ghgs[["variable"]]=="carbon_dioxide",]
+
+# select onlt the mean fitted data set
+meanfitco2 <- co2[co2[["parameter"]]=="mean_fitted",] 
+head(meanfitco2) 
+ 
+   year month       variable   parameter greenhouse_gas_concentration unit
+2  1972    12 carbon_dioxide mean_fitted                        326.1  ppm
+6  1973     1 carbon_dioxide mean_fitted                        326.4  ppm
+10 1973     2 carbon_dioxide mean_fitted                        326.6  ppm
+# add date column 
+meanfitco2[["date"]] = seq(as.Date('1974-12-31'), by = 'months', length = nrow(meanfitco2)) 
+
+# load library
+library(ggplot2) 
+
+svg(filename ="NZ-CO2-BHD-2019-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
+ggplot(meanfitco2, aes(x = date, y = greenhouse_gas_concentration)) + geom_line(colour = "#ED1A3B") +
+geom_line(linewidth=1 , colour = "#ED1A3B") + 
+theme_bw(base_size = 14) +
+theme(legend.position = c(0.75,0.82),legend.title = element_text(NULL), plot.caption = element_text(hjust =.5), plot.title = element_text(size = 20,hjust =0.5)) +
+labs(title="Baring Head carbon dioxide concentrations 1972 to 2023", caption="Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations") +   ylab("parts per million") +  xlab("Year") +
+theme(legend.title=element_blank()) 
+dev.off() 
+
+getwd()
