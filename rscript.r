@@ -20,7 +20,10 @@ str(ghgs)
  $ parameter                   : chr  "mean" "mean_fitted" "seasonal_adjusted_mean" "trend" ...
  $ greenhouse_gas_concentration: num  326 326 326 327 326 ...
  $ unit                        : chr  "ppm" "ppm" "ppm" "ppm" ...
-
+summary(ghgs[["year"]]) 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1972    1994    2004    2003    2013    2022 
+# the most recent year is 2022
 table(ghgs[["variable"]]) 
 carbon_dioxide        methane  nitrous_oxide 
           2404           1604           1268  
@@ -83,7 +86,7 @@ tail(meanfitmethane)
 4006 2022-12-31
 
 # create a time series object ??
-mfmts <- ts((meanfitmethane[["greenhouse_gas_concentration"]],frequency=12,start = c(1989,08))
+mfmts <- ts(meanfitmethane[["greenhouse_gas_concentration"]],frequency=12,start = c(1989,08))
 
 svg(filename="NZmethane-2019-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 #png("NZmethane-560by420.png", bg="white", width=560, height=420,pointsize = 14)
@@ -105,7 +108,7 @@ ggplot(meanfitmethane, aes(x = date, y = greenhouse_gas_concentration)) +
 geom_line(linewidth=1, colour = "#7570B3") + 
 theme_bw(base_size = 14) +
 theme(legend.position = c(0.75,0.82),legend.title = element_text(NULL), plot.caption = element_text(hjust =.5), plot.title = element_text(size = 20,hjust =0.5)) +
-labs(title="Baring Head methane concentrations 1989 to 2023", caption="Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations") +   ylab("parts per billion") +  xlab("Year") 
+labs(title="Baring Head methane concentrations 1989 to 2022", caption="Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations") +   ylab("parts per billion") +  xlab("Year") 
 dev.off() 
 
             
@@ -188,6 +191,7 @@ head(meanfitco2)
 2  1972    12 carbon_dioxide mean_fitted                        326.1  ppm
 6  1973     1 carbon_dioxide mean_fitted                        326.4  ppm
 10 1973     2 carbon_dioxide mean_fitted                        326.6  ppm
+
 # add date column 
 meanfitco2[["date"]] = seq(as.Date('1974-12-31'), by = 'months', length = nrow(meanfitco2)) 
 
@@ -199,6 +203,6 @@ ggplot(meanfitco2, aes(x = date, y = greenhouse_gas_concentration)) + geom_line(
 geom_line(linewidth=1 , colour = "#ED1A3B") + 
 theme_bw(base_size = 14) +
 theme(legend.position = c(0.75,0.82),legend.title = element_text(NULL), plot.caption = element_text(hjust =.5), plot.title = element_text(size = 20,hjust =0.5)) +
-labs(title="Baring Head carbon dioxide concentrations 1972 to 2023", caption="Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations") +   ylab("parts per million") +  xlab("Year") +
+labs(title="Baring Head carbon dioxide concentrations 1972 to 2022", caption="Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations") +   ylab("parts per million") +  xlab("Year") +
 theme(legend.title=element_blank()) 
 dev.off() 
