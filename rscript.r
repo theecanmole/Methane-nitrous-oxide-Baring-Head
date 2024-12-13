@@ -1,5 +1,8 @@
 ## Methane and nitrous oxide concentrations at Baring Head
 
+getwd() 
+[1] "/home/user/R/bhdghg/" 
+
 # Statistics NZ Tatauranga Aotearoa https://www.stats.govt.nz/indicators/greenhouse-gas-concentrations
 # link to zip file 17/08/2024
 download.file("https://www.stats.govt.nz/assets/Uploads/Environment-indicators-2023/Greenhouse-gas-concentrations/Download-data/greenhouse-gas-concentrations-data-to-2022.zip","greenhouse-gas-concentrations-data-to-2022.zip")
@@ -10,7 +13,7 @@ unzip("greenhouse-gas-concentrations-data-to-2022.zip")
 # 4 unzipped files, I want 'greenhouse-gas-concentrations-monthly-2022.csv'
 
 # read in the data file
-ghgs <- read.csv("greenhouse-gas-concentrations-monthly-2022.csv")
+ghgs <- read.csv("/home/user/R/bhdghg/greenhouse-gas-concentrations-monthly-2022.csv")
 
 str(ghgs) 
 'data.frame':	5276 obs. of  6 variables:
@@ -20,6 +23,7 @@ str(ghgs)
  $ parameter                   : chr  "mean" "mean_fitted" "seasonal_adjusted_mean" "trend" ...
  $ greenhouse_gas_concentration: num  326 326 326 327 326 ...
  $ unit                        : chr  "ppm" "ppm" "ppm" "ppm" ...
+
 summary(ghgs[["year"]]) 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
    1972    1994    2004    2003    2013    2022 
@@ -36,6 +40,7 @@ table(ghgs[["parameter"]])
 
 # select only methane records
 methane <- ghgs[ghgs[["variable"]]=="methane",]
+
 str(methane) 
 'data.frame':	1604 obs. of  6 variables:
  $ year                        : int  1989 1989 1989 1989 1989 1989 1989 1989 1989 1989 ...
@@ -194,6 +199,31 @@ head(meanfitco2)
 
 # add date column 
 meanfitco2[["date"]] = seq(as.Date('1974-12-31'), by = 'months', length = nrow(meanfitco2)) 
+head(meanfitco2) 
+
+# create new dataframe of columns 5 and 7
+meanfitco2 <- meanfitco2[,c(7,5)]
+str(meanfitco2) 
+'data.frame':	601 obs. of  2 variables:
+ $ date                        : Date, format: "1974-12-31" "1975-01-31" ...
+ $ greenhouse_gas_concentration: num  326 326 327 327 327 ...  
+
+head(meanfitco2) 
+         date greenhouse_gas_concentration
+2  1974-12-31                        326.1
+6  1975-01-31                        326.4
+10 1975-03-03                        326.6
+14 1975-03-31                        327.1
+18 1975-05-01                        327.3
+22 1975-05-31                        327.3 
+tail(meanfitco2) 
+           date greenhouse_gas_concentration
+2382 2024-07-31                        414.4
+2386 2024-08-31                        415.5
+2390 2024-10-01                        415.1
+2394 2024-10-31                        415.4
+2398 2024-12-01                        414.9
+2402 2024-12-31                        415.0 
 
 # load library
 library(ggplot2) 
@@ -206,3 +236,4 @@ theme(legend.position = c(0.75,0.82),legend.title = element_text(NULL), plot.cap
 labs(title="Baring Head carbon dioxide concentrations 1972 to 2022", caption="Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations") +   ylab("parts per million") +  xlab("Year") +
 theme(legend.title=element_blank()) 
 dev.off() 
+
