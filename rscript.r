@@ -3,6 +3,42 @@
 getwd() 
 [1] "/home/user/R/bhdghg/" 
 
+(today=Sys.Date())
+[1] "2026-11-07"
+## latest methane data from Stats NZ
+# https://www.stats.govt.nz/indicators/greenhouse-gas-concentrations-data-to-2025/
+
+From under Figure 3 click on the 3 vertical dots, select export (chart data) as csv file
+# Methane-(CH₄)-concentrations-at-Baring-Head,-Wellington,-1989–2025.csv
+
+methane <- read.csv("Methane-(CH₄)-concentrations-at-Baring-Head,-Wellington,-1989–2025.csv",header=TRUE)
+
+str(methane)
+'data.frame':	437 obs. of  3 variables:
+ $ Date : chr  "Aug-1989" "Sept-1989" "Oct-1989" "Nov-1989" ...
+ $ Mean : num  1659 1662 1668 1670 1664 ...
+ $ Trend: num  1654 1655 1656 1657 1658 ...
+
+# add date column
+methane[["date"]] = seq(as.Date('1989-08-31'), by = 'months', length = nrow(methane))
+
+tail(methane,1)
+        Date   Mean  Trend       date
+437 Dec-2025 1889.8 1889.7 2025-12-31
+
+# add ggplot
+library(ggplot2)
+
+svg(filename ="BHD-methane-1989-2026-Ggplot.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+ggplot(methane, aes(x = date, y = Mean)) +
+geom_line(linewidth=1, colour = "#7570B3") +
+theme_bw(base_size = 14) +
+theme(legend.position = c(0.75,0.82),legend.title = element_text(NULL), plot.caption = element_text(hjust =.5), plot.title = element_text(size = 20,hjust =0.5)) +
+labs(title="Baring Head methane concentrations 1989 to 2025", caption="Data: Stats NZ Tatauranga Aotearoa \nhttps://www.stats.govt.nz/indicators/greenhouse-gas-concentrations") +   ylab("parts per billion") +  xlab("Year")
+dev.off()
+
+## Older data and charts
+
 # Statistics NZ Tatauranga Aotearoa https://www.stats.govt.nz/indicators/greenhouse-gas-concentrations
 # link to zip file 17/08/2024
 download.file("https://www.stats.govt.nz/assets/Uploads/Environment-indicators-2023/Greenhouse-gas-concentrations/Download-data/greenhouse-gas-concentrations-data-to-2022.zip","greenhouse-gas-concentrations-data-to-2022.zip")
@@ -13,7 +49,7 @@ unzip("greenhouse-gas-concentrations-data-to-2022.zip")
 # 4 unzipped files, I want 'greenhouse-gas-concentrations-monthly-2022.csv'
 
 # read in the data file
-ghgs <- read.csv("/home/user/R/bhdghg/greenhouse-gas-concentrations-monthly-2022.csv")
+ghgs <- read.csv("/home/user/R/bhdghg/greenhouse-gas-concentrations-monthly-2022.csv",header=TRUE)
 
 str(ghgs) 
 'data.frame':	5276 obs. of  6 variables:
